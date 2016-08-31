@@ -1,0 +1,32 @@
+let initial_state = {
+  search_query: 'Pune,  Mumbai,  Nagpur',
+  results_fetched: false,
+  cities_data: [],
+  location: {
+    available: false,
+    latitude: '',
+    longitude: '',
+    user_geo_data: []
+  }
+};
+
+export default function reducer(state = initial_state, action){
+  switch (action.type) {
+
+    case 'SET_USER_LOCATION':
+      let location_obj = {location: { available: true,
+                                      latitude: action.payload.lat,
+                                      longitude: action.payload.lon,
+                                      user_geo_data: action.payload.data
+                                    }
+                          };
+
+      return Object.assign({}, state, location_obj);
+
+    case 'SEARCH_QUERY_CHANGE':
+      return Object.assign({}, state, { search_query: action.search_query });
+
+    default:
+      return state;
+  }
+}
