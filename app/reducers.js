@@ -1,5 +1,5 @@
 let initial_state = {
-  search_query: 'Pune,  Mumbai,  Nagpur',
+  search_query: '',
   results_fetched: false,
   cities_data: [],
   location: {
@@ -25,6 +25,9 @@ export default function reducer(state = initial_state, action){
 
     case 'SEARCH_QUERY_CHANGE':
       return Object.assign({}, state, { search_query: action.search_query });
+
+    case 'SET_CITIES_DATA':
+      return Object.assign({}, state, {results_fetched: true}, {cities_data: action.cities_data});
 
     default:
       return state;

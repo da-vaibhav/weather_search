@@ -15,3 +15,10 @@ export function search_query_change(location){
     search_query: location
   }
 }
+
+export function set_cities_data(data){
+  return {
+    type: 'SET_CITIES_DATA',
+    cities_data: data
+  }
+}

@@ -3,10 +3,15 @@ import 'whatwg-fetch';
 import {connect} from 'react-redux';
 
 import key from '../config';
-import { set_user_location, search_query_change } from './actions';
+import { set_user_location, search_query_change, set_cities_data } from './actions';
 import reducer from './reducers';
 import WeatherList from './WeatherList';
-import { GetUserLocation, SaveToLocalStorage, API_BASE_URL } from './utils';
+import CityData from './CityData';
+import { GetUserLocation,
+         SaveToLocalStorage,
+         API_BASE_URL,
+         pluck_city_and_list
+       } from './utils';
 
 
 class App extends Component {
@@ -20,6 +25,7 @@ class App extends Component {
     this.fetch_geo_data = this.fetch_geo_data.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.showCitiesData = this.showCitiesData.bind(this);
   }
 
   getUserLocation(e){
@@ -75,29 +81,36 @@ class App extends Component {
     console.log(cities);
     e.preventDefault();
 
-    var location = encodeURIComponent(this.props.search_query);
-    var urlPrefix = `${API_BASE_URL}?q=`;
-    var urlSuffix = `&APPID=${key}&units=metric`;
-    var url = urlPrefix + location + urlSuffix;
+    var city_promises = cities.map((city) => {
+      var location = encodeURIComponent(city);
+      var urlPrefix = `${API_BASE_URL}?q=`;
+      var urlSuffix = `&APPID=${key}&units=metric`;
+      var url = urlPrefix + location + urlSuffix;
 
-    fetch(url)
-    .then(function(response) {
-      return response.json()
-    })
-    .then(function(data) {
-      console.log('parsed json', data)
-      this.setState({
-        resultsFetched: true,
-        cities_data: data
-      })
+      return fetch(url).then(response => response.json());
+    });
+
+    Promise.all(city_promises)
+    .then((all_responses) => {
+      let cities_data = all_responses.map(pluck_city_and_list);
+
+      console.log(cities_data);
+      this.props.dispatch(set_cities_data({resultsFetched: true, cities_data: cities_data}));
     })
     .catch(function(ex) {
       console.log('parsing failed', ex)
     });
   }
 
+
   locationChange(e){
     this.props.dispatch(search_query_change(e.target.value))
+  }
+
+  showCitiesData(city){
+    return(
+      <CityData data={city} />
+    );
   }
 
   render(){
@@ -105,6 +118,8 @@ class App extends Component {
     let Long = this.props.lon;
     let is_location_available = this.props.is_loation_set;
     let location_availability = is_location_available ? `Lat: ${Lat}, Long: ${Long}` : 'Not Available';
+    console.log(this.props.cities_data);
+    let search_results = this.props.cities_data.map(this.showCitiesData);
 
     let weather_for_user_city = this.props.user_geo_data.map((day, i) => {
       return (
@@ -114,7 +129,8 @@ class App extends Component {
 
     return (
       <form onSubmit={this.onFormSubmit}>
-        <input value={this.props.location} onChange={this.locationChange} type="text" placeholder={this.initial_text} />
+        <input value={this.props.search_query} onChange={this.locationChange} type="text" placeholder={this.initial_text} />
+        <button type='submit'>Search</button>
         <p>{this.props.resultsFetched ? null : this.initial_text }</p>
         <p>
           Your Location: {location_availability} {' '}
@@ -125,9 +141,6 @@ class App extends Component {
         <div>
           {is_location_available ? weather_for_user_city : ''}
         </div>
-        <br/>
-        <br/>
-        <small>key is {key}</small>
      </form>
     );
   }
@@ -139,7 +152,8 @@ function matchStateToProps(state){
     lat: state.location.latitude,
     lon: state.location.longitude,
     is_loation_set: state.location.available,
-    user_geo_data: state.location.user_geo_data
+    user_geo_data: state.location.user_geo_data,
+    cities_data: state.cities_data
   }
 }
 
