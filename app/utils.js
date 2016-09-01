@@ -10,7 +10,7 @@ export function SaveToLocalStorage (key, val) {
   window.localStorage.setItem(key, JSON.stringify(val));
 }
 
-export function pluck_city_and_list (data) {
+export function PluckCityAndList (data) {
   return {
     city_name: data.city.name,
     list: data.list

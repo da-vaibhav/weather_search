@@ -4,10 +4,10 @@ import {connect} from 'react-redux';
 
 import key from '../config';
 
-import { set_user_location,
-         search_query_change,
-         set_cities_data,
-         is_loading
+import { SetUserLocation,
+         SearchQueryChange,
+         SetCitiesData,
+         IsLoading
        } from './actions';
 
 import WeatherList from './WeatherList';
@@ -15,7 +15,7 @@ import CityData from './CityData';
 import { GetUserLocation,
          SaveToLocalStorage,
          API_BASE_URL,
-         pluck_city_and_list
+         PluckCityAndList
        } from './utils';
 
 class App extends Component {
@@ -38,15 +38,15 @@ class App extends Component {
     GetUserLocation()
     .then(({lat, lon}) => {
       console.log('got user location ', lat, lon);
-      this.props.dispatch(is_loading(true));
+      this.props.dispatch(IsLoading(true));
       return this.fetch_geo_data(lat, lon);
     })
     .then(data => {
       console.log('data list => ', data.list);
       SaveToLocalStorage('forecast_data', data.list);
 
-      this.props.dispatch(is_loading(false));
-      this.props.dispatch(set_user_location({
+      this.props.dispatch(IsLoading(false));
+      this.props.dispatch(SetUserLocation({
         lat: data.city.coord.lat,
         lon: data.city.coord.lon,
         data: data.list
@@ -73,7 +73,7 @@ class App extends Component {
     let count = 'cnt=14';
 
     return new Promise((resolve, reject) => {
-      this.props.dispatch(is_loading(true));
+      this.props.dispatch(IsLoading(true));
       fetch(`${query_url}${lat}&${lon}&${count}&APPID=${key}&units=metric`)
       .then((response) => response.json())
       .then((data) => {
@@ -84,9 +84,9 @@ class App extends Component {
 
   onFormSubmit (e) {
     e.preventDefault();
-    let cities = this.props.search_query.split(',')
+    let cities = this.props.SearchQuery.split(',')
                   .map((city) => city.trim())
-                  .filter((city_name) => city_name !== '');
+                  .filter((CityName) => CityName !== '');
 
     // all the initial bookkeeping here
     var urlPrefix = `${API_BASE_URL}?q=`;
@@ -98,28 +98,28 @@ class App extends Component {
       return;
     }
 
-    var city_promises = cities.map((city) => {
+    var CityPromises = cities.map((city) => {
       var location = encodeURIComponent(city);
       var url = urlPrefix + location + urlSuffix + count;
-      this.props.dispatch(is_loading(true));
+      this.props.dispatch(IsLoading(true));
       return fetch(url).then(response => response.json());
     });
 
-    Promise.all(city_promises)
-    .then((all_responses) => {
-      let cities_data = all_responses.map(pluck_city_and_list);
+    Promise.all(CityPromises)
+    .then((AllResponses) => {
+      let CitiesData = AllResponses.map(PluckCityAndList);
 
-      this.props.dispatch(is_loading(false));
-      this.props.dispatch(set_cities_data({resultsFetched: true, cities_data: cities_data}));
+      this.props.dispatch(IsLoading(false));
+      this.props.dispatch(SetCitiesData({CitiesData}));
     })
     .catch((ex) => {
-      this.props.dispatch(is_loading(false));
+      this.props.dispatch(IsLoading(false));
       console.log('parsing failed', ex);
     });
   }
 
   locationChange (e) {
-    this.props.dispatch(search_query_change(e.target.value));
+    this.props.dispatch(SearchQueryChange(e.target.value));
   }
 
   render () {
@@ -127,20 +127,20 @@ class App extends Component {
           lon: Lon,
           is_location_set: is_location_available,
           cities_data_available,
-          user_geo_data,
-          cities_data: cities,
+          UserGeoData,
+          CitiesData: cities,
           loading
         } = this.props;
 
     let location_availability = is_location_available ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';
 
-    let search_results;
+    let SearchResults;
 
     if (cities_data_available) {
-      search_results = cities.map((city, i) => <CityData key={i} city_data={city} />);
+      SearchResults = cities.map((city, i) => <CityData key={i} city_data={city} />);
     }
 
-    let weather_for_user = user_geo_data.map((day, i) =>
+    let WeatherForUser = UserGeoData.map((day, i) =>
       <WeatherList key={i} index={i} day={day} />
    );
 
@@ -152,7 +152,7 @@ class App extends Component {
           </pre>
         */}
 
-        <input value={this.props.search_query} type='search'
+        <input value={this.props.SearchQuery} type='search'
            onChange={this.locationChange}
            placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
         {' '}
@@ -174,13 +174,13 @@ class App extends Component {
         {is_location_available ? (
           <div className='user-data'>
             <h4>Your location data:</h4>
-            {weather_for_user}
+            {WeatherForUser}
           </div>
           ) : ''}
 
         {
           cities_data_available
-          ? (<div className='city-container'>{search_results}</div>)
+          ? (<div className='city-container'>{SearchResults}</div>)
           : null
         }
 
@@ -191,24 +191,24 @@ class App extends Component {
 
 function matchStateToProps (state) {
   return {
-    search_query: state.search_query,
+    SearchQuery: state.SearchQuery,
     lat: state.location.latitude,
     lon: state.location.longitude,
     is_location_set: state.location.available,
-    user_geo_data: state.location.user_geo_data,
-    cities_data: state.cities_data,
-    loading: state.isLoading,
-    cities_data_available: state.query_data_fetched
+    UserGeoData: state.location.UserGeoData,
+    CitiesData: state.CitiesData,
+    loading: state.IsLoading,
+    cities_data_available: state.QueryDataFetched
   };
 }
 
 App.propTypes = {
-  search_query: React.PropTypes.string,
+  SearchQuery: React.PropTypes.string,
   lat: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
   lon: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
   is_location_set: React.PropTypes.bool,
-  user_geo_data: React.PropTypes.array,
-  cities_data: React.PropTypes.array,
+  UserGeoData: React.PropTypes.array,
+  CitiesData: React.PropTypes.array,
   loading: React.PropTypes.bool,
   cities_data_available: React.PropTypes.bool
 };

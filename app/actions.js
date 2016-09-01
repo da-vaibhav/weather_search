@@ -1,4 +1,4 @@
-export function set_user_location(location){
+export function SetUserLocation (location) {
   return {
     type: 'SET_USER_LOCATION',
     payload: {
@@ -9,23 +9,23 @@ export function set_user_location(location){
   };
 }
 
-export function search_query_change(location){
+export function SearchQueryChange (location) {
   return {
     type: 'SEARCH_QUERY_CHANGE',
-    search_query: location
+    SearchQuery: location
   };
 }
 
-export function set_cities_data(data){
+export function SetCitiesData (data) {
   return {
     type: 'SET_CITIES_DATA',
-    cities_data: data.cities_data
+    CitiesData: data.CitiesData
   };
 }
 
-export function is_loading(loading) {
+export function IsLoading (loading) {
   return {
     type: 'IS_LOADING',
-    isLoading: loading
+    IsLoading: loading
   };
 }
