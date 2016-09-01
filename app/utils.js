@@ -17,4 +17,4 @@ export function pluck_city_and_list(data) {
   }
 }
 
-export const API_BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast';
+export const API_BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast/daily';

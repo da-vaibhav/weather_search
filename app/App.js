@@ -152,7 +152,8 @@ class App extends Component {
             <code> {JSON.stringify(this.props.state, null, 4)} </code>
           </pre>
         */}
-        <input value={this.props.search_query}  type="text"
+
+        <input value={this.props.search_query}  type="search"
                onChange={this.locationChange} placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' /> {' '}
         <button type='submit'>Search</button>
         <span> Your Location: {location_availability} </span>
