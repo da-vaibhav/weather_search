@@ -5,7 +5,7 @@ var CityData = (data) => {
   let CityWeather = CityDetails.list.map((ListItem, i) => {
     return (
       <li key={i}>
-        <span>day {i+1}: {ListItem.weather[0].description}</span>
+        <span>day {i + 1}: {ListItem.weather[0].description}</span>
       </li>
     );
   });

@@ -24,7 +24,7 @@ class App extends Component {
 
     // bind methods
     this.getUserLocation = this.getUserLocation.bind(this);
-    this.fetch_geo_data = this.fetch_geo_data.bind(this);
+    this.fetchGeoData = this.fetchGeoData.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
 
@@ -39,7 +39,7 @@ class App extends Component {
     .then(({lat, lon}) => {
       console.log('got user location ', lat, lon);
       this.props.dispatch(IsLoading(true));
-      return this.fetch_geo_data(lat, lon);
+      return this.fetchGeoData(lat, lon);
     })
     .then(data => {
       console.log('data list => ', data.list);
@@ -55,26 +55,26 @@ class App extends Component {
   }
 
   showUserLocationWeather () {
-    let local_data = JSON.parse(window.localStorage.getItem('forecast_data'));
+    let LocalData = JSON.parse(window.localStorage.getItem('forecast_data'));
 
-    if (local_data.length < 1) {
+    if (LocalData.length < 1) {
       alert('Please provide your location to show the weather forecast data');
       return;
     }
-    console.log(local_data);
+    console.log(LocalData);
   }
 
-  fetch_geo_data (latitude, longitude) {
+  fetchGeoData (latitude, longitude) {
     console.log('fetching geo data');
 
-    let query_url = `${API_BASE_URL}/?`;
+    let queryURL = `${API_BASE_URL}/?`;
     let lat = `lat=${latitude}`;
     let lon = `lon=${longitude}`;
     let count = 'cnt=14';
 
     return new Promise((resolve, reject) => {
       this.props.dispatch(IsLoading(true));
-      fetch(`${query_url}${lat}&${lon}&${count}&APPID=${key}&units=metric`)
+      fetch(`${queryURL}${lat}&${lon}&${count}&APPID=${key}&units=metric`)
       .then((response) => response.json())
       .then((data) => {
         resolve(data);
@@ -125,18 +125,18 @@ class App extends Component {
   render () {
     let { lat: Lat,
           lon: Lon,
-          is_location_set: is_location_available,
-          cities_data_available,
+          isLocationSet: isLocationAvailable,
+          citiesDataAvailable,
           UserGeoData,
           CitiesData: cities,
           loading
         } = this.props;
 
-    let location_availability = is_location_available ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';
+    let locationAvailability = isLocationAvailable ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';
 
     let SearchResults;
 
-    if (cities_data_available) {
+    if (citiesDataAvailable) {
       SearchResults = cities.map((city, i) => <CityData key={i} city_data={city} />);
     }
 
@@ -153,25 +153,25 @@ class App extends Component {
         */}
 
         <input value={this.props.SearchQuery} type='search'
-           onChange={this.locationChange}
-           placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
+          onChange={this.locationChange}
+          placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
         {' '}
 
         <button type='submit'>Search</button>
-        <span> Your Location: {location_availability} </span>
+        <span> Your Location: {locationAvailability} </span>
         <button type='button' onClick={this.getUserLocation}>
           Show weather for my location
         </button>
 
         {
-          !cities_data_available
+          !citiesDataAvailable
           ? (<p><small>{this.null_search_text}</small></p>)
           : null
         }
 
         {loading ? <div className='loading-spinner'></div> : ''}
 
-        {is_location_available ? (
+        {isLocationAvailable ? (
           <div className='user-data'>
             <h4>Your location data:</h4>
             {WeatherForUser}
@@ -179,7 +179,7 @@ class App extends Component {
           ) : ''}
 
         {
-          cities_data_available
+          citiesDataAvailable
           ? (<div className='city-container'>{SearchResults}</div>)
           : null
         }
@@ -194,11 +194,11 @@ function matchStateToProps (state) {
     SearchQuery: state.SearchQuery,
     lat: state.location.latitude,
     lon: state.location.longitude,
-    is_location_set: state.location.available,
+    isLocationSet: state.location.available,
     UserGeoData: state.location.UserGeoData,
     CitiesData: state.CitiesData,
     loading: state.IsLoading,
-    cities_data_available: state.QueryDataFetched
+    citiesDataAvailable: state.QueryDataFetched
   };
 }
 
@@ -206,11 +206,11 @@ App.propTypes = {
   SearchQuery: React.PropTypes.string,
   lat: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
   lon: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-  is_location_set: React.PropTypes.bool,
+  isLocationSet: React.PropTypes.bool,
   UserGeoData: React.PropTypes.array,
   CitiesData: React.PropTypes.array,
   loading: React.PropTypes.bool,
-  cities_data_available: React.PropTypes.bool
+  citiesDataAvailable: React.PropTypes.bool
 };
 
 export default connect(matchStateToProps)(App);
