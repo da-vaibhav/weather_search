@@ -67,7 +67,7 @@ class App extends Component {
   fetch_geo_data(latitude, longitude){
     console.log('fetching geo data');
 
-    let query_url = `${API_BASE_URL}`;
+    let query_url = `${API_BASE_URL}/daily?`;
     let lat = `lat=${latitude}`;
     let lon = `lon=${longitude}`;
     let count = `cnt=14`;
@@ -89,7 +89,7 @@ class App extends Component {
                   .filter((city_name) => city_name !== '');
 
     // all the initial bookkeeping here
-    var urlPrefix = `${API_BASE_URL}`;
+    var urlPrefix = `${API_BASE_URL}?q=`;
     var urlSuffix = `&APPID=${key}&units=metric`;
     var count = '&cnt=14';
 
