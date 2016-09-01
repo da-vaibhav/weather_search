@@ -29,6 +29,8 @@ class App extends Component {
     this.fetch_geo_data = this.fetch_geo_data.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+
+    this.null_search_text = 'please enter city names and press enter to search for cities.';
   }
 
   getUserLocation(e){
@@ -67,7 +69,7 @@ class App extends Component {
   fetch_geo_data(latitude, longitude){
     console.log('fetching geo data');
 
-    let query_url = `${API_BASE_URL}/daily?`;
+    let query_url = `${API_BASE_URL}/?`;
     let lat = `lat=${latitude}`;
     let lon = `lon=${longitude}`;
     let count = `cnt=14`;
@@ -154,12 +156,20 @@ class App extends Component {
         */}
 
         <input value={this.props.search_query}  type="search"
-               onChange={this.locationChange} placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' /> {' '}
+               onChange={this.locationChange}
+               placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
+               {' '}
+
         <button type='submit'>Search</button>
         <span> Your Location: {location_availability} </span>
         <button type='button' onClick={this.getUserLocation}>
-          Show weather data for my location
+          Show weather for my location
         </button>
+
+        {!cities_data_available ?
+          (<p><small>{this.null_search_text}</small></p>):
+          null
+        }
 
         {loading ? <div className="loading-spinner"></div> : '' }
 
@@ -170,8 +180,11 @@ class App extends Component {
           </div>
           ) : ''}
 
-        {cities_data_available ? <div className="city-container">{search_results}</div> : <p>please enter city names and press enter.</p>}
-
+        {
+          cities_data_available ?
+          (<div className="city-container">{search_results}</div>) :
+          null
+        }
 
      </form>
     );

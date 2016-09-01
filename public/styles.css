@@ -9,16 +9,17 @@ input, button {
 }
 
 button {
-  padding: 13px;
+  font-size: 16px;
+  padding: 10px;
   background-color: steelblue;
   color: white;
 }
 
 input {
-  width: 550px;
+  width: 500px;
   display: inline-block;
-  padding: 10px;
-  font-size: 17px;
+  padding: 10px 5px;
+  font-size: 15px;
 }
 
 @keyframes rotate-forever {
