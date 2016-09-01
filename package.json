@@ -7,7 +7,8 @@
     "start": "webpack-dev-server --progress",
     "build": "NODE_ENV=production node_modules/.bin/webpack -p --progress --colors",
     "test": "jest",
-    "lint": "semistandard --verbose | snazzy"
+    "lint": "semistandard --verbose | snazzy",
+    "lint:fix": "semistandard --fix --verbose | snazzy"
   },
   "devDependencies": {
     "babel-core": "~6.7.*",

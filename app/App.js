@@ -1,3 +1,4 @@
+/* global fetch, alert */
 import React, { Component } from 'react';
 import 'whatwg-fetch';
 import {connect} from 'react-redux';
