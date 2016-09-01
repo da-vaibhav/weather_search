@@ -17,4 +17,8 @@ var CityData = (data) => {
   )
 }
 
+CityData.propTypes = {
+  city_data: React.PropTypes.object
+}
+
 export default CityData;

@@ -200,9 +200,19 @@ function matchStateToProps(state){
     user_geo_data: state.location.user_geo_data,
     cities_data: state.cities_data,
     loading: state.isLoading,
-    cities_data_available: state.query_data_fetched,
-    state: state
+    cities_data_available: state.query_data_fetched
   }
 }
+
+App.propTypes = {
+  search_query: React.PropTypes.string,
+  lat: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+  lon: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+  is_location_set: React.PropTypes.bool,
+  user_geo_data: React.PropTypes.array,
+  cities_data: React.PropTypes.array,
+  loading: React.PropTypes.bool,
+  cities_data_available: React.PropTypes.bool
+};
 
 export default connect(matchStateToProps)(App);

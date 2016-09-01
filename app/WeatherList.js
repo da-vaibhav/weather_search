@@ -8,4 +8,8 @@ var WeatherList = (props) => {
   )
 }
 
+WeatherList.propTypes = {
+  index: React.PropTypes.number
+}
+
 export default WeatherList;
