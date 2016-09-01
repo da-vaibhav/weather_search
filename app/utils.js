@@ -1,7 +1,7 @@
 export function GetUserLocation() {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition((position) => {
-      resolve({lat: position.coords.latitude, long: position.coords.longitude})
+      resolve({lat: position.coords.latitude, lon: position.coords.longitude})
     });
   });
 }

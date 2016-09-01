@@ -1,3 +1,22 @@
 html {
   font-size: 1.2rem;
 }
+
+input, button {
+  border-radius: 3px;
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+button {
+  padding: 7px;
+  background-color: steelblue;
+  color: white;
+}
+
+input {
+  width: 250px;
+  display: inline-block;
+}
+
+.city_list {}
