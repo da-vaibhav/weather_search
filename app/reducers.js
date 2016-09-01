@@ -8,10 +8,10 @@ let initial_state = {
     longitude: '',
     user_geo_data: []
   },
-  cities_data: [],
+  cities_data: []
 };
 
-export default function reducer(state = initial_state, action){
+export default function reducer(state = initial_state, action) {
   switch (action.type) {
 
     case 'SET_USER_LOCATION':

@@ -10,7 +10,6 @@ import { set_user_location,
          is_loading
        } from './actions';
 
-import reducer from './reducers';
 import WeatherList from './WeatherList';
 import CityData from './CityData';
 import { GetUserLocation,
@@ -19,9 +18,8 @@ import { GetUserLocation,
          pluck_city_and_list
        } from './utils';
 
-
 class App extends Component {
-  constructor(props){
+  constructor (props) {
     super(props);
 
     // bind methods
@@ -33,12 +31,12 @@ class App extends Component {
     this.null_search_text = 'please enter city names and press enter to search for cities.';
   }
 
-  getUserLocation(e){
+  getUserLocation (e) {
     e.preventDefault();
     console.log('getting User Location...');
 
     GetUserLocation()
-    .then( ({lat, lon}) => {
+    .then(({lat, lon}) => {
       console.log('got user location ', lat, lon);
       this.props.dispatch(is_loading(true));
       return this.fetch_geo_data(lat, lon);
@@ -56,7 +54,7 @@ class App extends Component {
     });
   }
 
-  showUserLocationWeather(){
+  showUserLocationWeather () {
     let local_data = JSON.parse(window.localStorage.getItem('forecast_data'));
 
     if (local_data.length < 1) {
@@ -66,13 +64,13 @@ class App extends Component {
     console.log(local_data);
   }
 
-  fetch_geo_data(latitude, longitude){
+  fetch_geo_data (latitude, longitude) {
     console.log('fetching geo data');
 
     let query_url = `${API_BASE_URL}/?`;
     let lat = `lat=${latitude}`;
     let lon = `lon=${longitude}`;
-    let count = `cnt=14`;
+    let count = 'cnt=14';
 
     return new Promise((resolve, reject) => {
       this.props.dispatch(is_loading(true));
@@ -80,11 +78,11 @@ class App extends Component {
       .then((response) => response.json())
       .then((data) => {
         resolve(data);
-      })
+      });
     });
   }
 
-  onFormSubmit(e) {
+  onFormSubmit (e) {
     e.preventDefault();
     let cities = this.props.search_query.split(',')
                   .map((city) => city.trim())
@@ -95,8 +93,7 @@ class App extends Component {
     var urlSuffix = `&APPID=${key}&units=metric`;
     var count = '&cnt=14';
 
-
-    if(cities.length < 1) {
+    if (cities.length < 1) {
       alert('Please enter valid city names separated by comma');
       return;
     }
@@ -117,16 +114,15 @@ class App extends Component {
     })
     .catch((ex) => {
       this.props.dispatch(is_loading(false));
-      console.log('parsing failed', ex)
+      console.log('parsing failed', ex);
     });
   }
 
-
-  locationChange(e){
-    this.props.dispatch(search_query_change(e.target.value))
+  locationChange (e) {
+    this.props.dispatch(search_query_change(e.target.value));
   }
 
-  render(){
+  render () {
     let { lat: Lat,
           lon: Lon,
           is_location_set: is_location_available,
@@ -141,11 +137,12 @@ class App extends Component {
     let search_results;
 
     if (cities_data_available) {
-      search_results = cities.map((city,i) => <CityData key={i} city_data={city} />);
+      search_results = cities.map((city, i) => <CityData key={i} city_data={city} />);
     }
 
-    let weather_for_user = user_geo_data
-                           .map((day, i) => <WeatherList key={i} index={i} day={day} />);
+    let weather_for_user = user_geo_data.map((day, i) =>
+      <WeatherList key={i} index={i} day={day} />
+   );
 
     return (
       <form onSubmit={this.onFormSubmit}>
@@ -155,10 +152,10 @@ class App extends Component {
           </pre>
         */}
 
-        <input value={this.props.search_query}  type="search"
-               onChange={this.locationChange}
-               placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
-               {' '}
+        <input value={this.props.search_query} type='search'
+           onChange={this.locationChange}
+           placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' />
+        {' '}
 
         <button type='submit'>Search</button>
         <span> Your Location: {location_availability} </span>
@@ -166,32 +163,33 @@ class App extends Component {
           Show weather for my location
         </button>
 
-        {!cities_data_available ?
-          (<p><small>{this.null_search_text}</small></p>):
-          null
+        {
+          !cities_data_available
+          ? (<p><small>{this.null_search_text}</small></p>)
+          : null
         }
 
-        {loading ? <div className="loading-spinner"></div> : '' }
+        {loading ? <div className='loading-spinner'></div> : ''}
 
         {is_location_available ? (
-          <div className="user-data">
+          <div className='user-data'>
             <h4>Your location data:</h4>
             {weather_for_user}
           </div>
           ) : ''}
 
         {
-          cities_data_available ?
-          (<div className="city-container">{search_results}</div>) :
-          null
+          cities_data_available
+          ? (<div className='city-container'>{search_results}</div>)
+          : null
         }
 
-     </form>
+      </form>
     );
   }
 }
 
-function matchStateToProps(state){
+function matchStateToProps (state) {
   return {
     search_query: state.search_query,
     lat: state.location.latitude,
@@ -201,7 +199,7 @@ function matchStateToProps(state){
     cities_data: state.cities_data,
     loading: state.isLoading,
     cities_data_available: state.query_data_fetched
-  }
+  };
 }
 
 App.propTypes = {

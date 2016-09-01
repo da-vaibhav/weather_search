@@ -3,11 +3,9 @@ import React from 'react';
 var CityData = (data) => {
   let city_details = data.city_data;
   let city_weather = city_details.list.map((list_item, i) => {
-        return (
-                <li key={i}>
-                  day {i+1}:  {list_item.weather[0].description}
-                </li>
-                )
+        return (<li key={i}>
+                  <span>day {i+1}:  {list_item.weather[0].description}</span>
+                </li>)
       })
   return (
     <div>

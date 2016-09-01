@@ -2,10 +2,10 @@ var webpack = require('webpack');
 
 var config = {
   devtool: 'eval-source-map',
-  entry: __dirname + "/app/index.js",
+  entry: __dirname + '/app/index.js',
   output: {
-    path: __dirname + "/public",
-    filename: "bundle.js"
+    path: __dirname + '/public',
+    filename: 'bundle.js'
   },
   module: {
     loaders: [{
@@ -18,12 +18,12 @@ var config = {
     }]
   },
   devServer: {
-    contentBase: "./public",
+    contentBase: './public',
     colors: true,
     historyApiFallback: true,
     inline: true
-  },
-}
+  }
+};
 
 if (process.env.NODE_ENV === 'production') {
   config.devtool = false;
@@ -38,6 +38,6 @@ if (process.env.NODE_ENV === 'production') {
       }
     })
   ];
-};
+}
 
 module.exports = config;
