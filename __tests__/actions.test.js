@@ -1,10 +1,20 @@
-import { search_query_change } from '../app/actions.js';
+import * as Actions from '../app/actions.js';
 
 describe('search query change', function() {
 
+  const location = 'New York';
+
   it('shows input query', function() {
-    const location = 'Pune, Mumbai, Nagpur';
-    expect(search_query_change(location).search_query)
+
+    expect(Actions.search_query_change(location).search_query)
       .toEqual(location);
+
   });
+
+  it('description', function() {
+    const type = 'SEARCH_QUERY_CHANGE';
+    expect(Actions.search_query_change(location).type)
+      .toEqual(type);
+  });
+
 });
