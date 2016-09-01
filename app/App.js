@@ -24,8 +24,6 @@ class App extends Component {
   constructor(props){
     super(props);
 
-    this.initial_text = 'Please enter the city names above and press enter to search.';
-
     // bind methods
     this.getUserLocation = this.getUserLocation.bind(this);
     this.fetch_geo_data = this.fetch_geo_data.bind(this);
@@ -115,7 +113,7 @@ class App extends Component {
       this.props.dispatch(is_loading(false));
       this.props.dispatch(set_cities_data({resultsFetched: true, cities_data: cities_data}));
     })
-    .catch(function(ex) {
+    .catch((ex) => {
       this.props.dispatch(is_loading(false));
       console.log('parsing failed', ex)
     });
@@ -129,9 +127,11 @@ class App extends Component {
   render(){
     let { lat: Lat,
           lon: Lon,
-          is_loation_set: is_location_available,
+          is_location_set: is_location_available,
           cities_data_available,
-          user_geo_data
+          user_geo_data,
+          cities_data: cities,
+          loading
         } = this.props;
 
     let location_availability = is_location_available ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';
@@ -139,35 +139,39 @@ class App extends Component {
     let search_results;
 
     if (cities_data_available) {
-      search_results = this.props.cities_data.map((city,i) => <CityData key={i} city_data={city} />);
+      search_results = cities.map((city,i) => <CityData key={i} city_data={city} />);
     }
 
-    let weather_for_user_city = user_geo_data.map((day, i) => {
-      return (
-        <WeatherList key={i} index={i} day={day} />
-      )
-    });
+    let weather_for_user = user_geo_data
+                           .map((day, i) => <WeatherList key={i} index={i} day={day} />);
 
     return (
       <form onSubmit={this.onFormSubmit}>
-        <pre style={{float: 'right'}}>
-          <code>
-            {JSON.stringify(this.props.state, null, 4)}
-          </code>
-        </pre>
-        <input value={this.props.search_query} onChange={this.locationChange} type="text" placeholder={this.initial_text} /> {' '}
+        {/*
+          <pre style={{float: 'right'}}>
+            <code> {JSON.stringify(this.props.state, null, 4)} </code>
+          </pre>
+        */}
+        <input value={this.props.search_query}  type="text"
+               onChange={this.locationChange} placeholder='Enter city names separated by comma. Eg. Mumbai, Pune, Nagpur' /> {' '}
         <button type='submit'>Search</button>
-        <p>{this.props.resultsFetched ? null : this.initial_text }</p>
-        <p>
-          Your Location: {location_availability} {' '}
-          <button type='button' onClick={this.getUserLocation}>
-            Show weather data for my location
-          </button>
-        </p>
+        <span> Your Location: {location_availability} </span>
+        <button type='button' onClick={this.getUserLocation}>
+          Show weather data for my location
+        </button>
 
-          {is_location_available ? <div>{weather_for_user_city}</div> : ''}
+        {loading ? <div className="loading-spinner"></div> : '' }
 
-          {cities_data_available ? <div>{search_results}</div>: <p>please enter city names and press enter.</p>}
+        {is_location_available ? (
+          <div className="user-data">
+            <h4>Your location data:</h4>
+            {weather_for_user}
+          </div>
+          ) : ''}
+
+        {cities_data_available ? <div className="city-container">{search_results}</div> : <p>please enter city names and press enter.</p>}
+
+
      </form>
     );
   }
@@ -178,7 +182,7 @@ function matchStateToProps(state){
     search_query: state.search_query,
     lat: state.location.latitude,
     lon: state.location.longitude,
-    is_loation_set: state.location.available,
+    is_location_set: state.location.available,
     user_geo_data: state.location.user_geo_data,
     cities_data: state.cities_data,
     loading: state.isLoading,
