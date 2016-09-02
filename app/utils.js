@@ -1,7 +1,9 @@
-export function GetUserLocation () {
+export function requestUsersLocation () {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition((position) => {
       resolve({lat: position.coords.latitude, lon: position.coords.longitude});
+    }, (err) => {
+      reject('Access denied. Please provide access to your location.');
     });
   });
 }

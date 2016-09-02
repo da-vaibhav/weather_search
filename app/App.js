@@ -13,7 +13,7 @@ import { SetUserLocation,
 
 import WeatherList from './WeatherList';
 import CityData from './CityData';
-import { GetUserLocation,
+import { requestUsersLocation,
          SaveToLocalStorage,
          API_BASE_URL,
          PluckCityAndList
@@ -36,7 +36,8 @@ class App extends Component {
     e.preventDefault();
     console.log('getting User Location...');
 
-    GetUserLocation()
+    // handle rejection here
+    requestUsersLocation()
     .then(({lat, lon}) => {
       console.log('got user location ', lat, lon);
       this.props.dispatch(IsLoading(true));
@@ -52,6 +53,9 @@ class App extends Component {
         lon: data.city.coord.lon,
         data: data.list
       }));
+    })
+    .catch(err => {
+      alert(err);
     });
   }
 
