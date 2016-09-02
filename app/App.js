@@ -1,22 +1,18 @@
-/* global fetch, alert */
+/* global alert */
 import React, { Component } from 'react';
-import 'whatwg-fetch';
 import {connect} from 'react-redux';
-
-import ConfigKey from '../config';
 
 import { SetUserLocation,
          SearchQueryChange,
-         SetCitiesData,
-         IsLoading
+         IsLoading,
+         OnFormSubmit
        } from './actions';
 
 import WeatherList from './WeatherList';
+import UserResultsSection from './UserResultsSection';
 import CityData from './CityData';
 import { requestUsersLocation,
          SaveToLocalStorage,
-         API_BASE_URL,
-         PluckCityAndList,
          fetchGeoData
        } from './utils';
 
@@ -70,40 +66,7 @@ class App extends Component {
 
   onFormSubmit (e) {
     e.preventDefault();
-    let cities = this.props.SearchQuery.split(',')
-                  .map((city) => city.trim())
-                  .filter((CityName) => CityName !== '');
-
-    // all the initial bookkeeping here
-    var urlPrefix = `${API_BASE_URL}?q=`;
-    var urlSuffix = `&APPID=${ConfigKey}&units=metric`;
-    var count = '&cnt=14';
-
-    if (cities.length < 1) {
-      alert('Please enter valid city names separated by comma');
-      return;
-    }
-
-    // avoid multiple dispatch(IsLoading = true) inside promise array
-    this.props.dispatch(IsLoading(true));
-
-    let CityPromises = cities.map((city) => {
-      let location = encodeURIComponent(city);
-      let url = urlPrefix + location + urlSuffix + count;
-      return fetch(url).then(response => response.json());
-    });
-
-    Promise.all(CityPromises)
-    .then((AllResponses) => {
-      let CitiesData = AllResponses.map(PluckCityAndList);
-
-      this.props.dispatch(IsLoading(false));
-      this.props.dispatch(SetCitiesData({CitiesData}));
-    })
-    .catch((ex) => {
-      this.props.dispatch(IsLoading(false));
-      console.log('parsing failed', ex);
-    });
+    this.props.dispatch(OnFormSubmit(this.props.SearchQuery));
   }
 
   locationChange (e) {
@@ -158,13 +121,7 @@ class App extends Component {
         }
 
         {loading ? <div className='loading-spinner'></div> : ''}
-
-        {isLocationAvailable ? (
-          <div className='user-data'>
-            <h4>Your location data:</h4>
-            {WeatherForUser}
-          </div>
-          ) : ''}
+        {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null }
 
         {
           citiesDataAvailable
