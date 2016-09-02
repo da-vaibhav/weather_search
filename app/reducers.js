@@ -22,7 +22,7 @@ export default function reducer (state = InitialState, action) {
                                      }
                         };
 
-      return Object.assign({}, state, LocationObj);
+      return Object.assign({}, state, LocationObj, { IsLoading: false });
 
     case 'SEARCH_QUERY_CHANGE':
       return Object.assign({}, state, { SearchQuery: action.SearchQuery });

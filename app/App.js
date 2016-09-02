@@ -47,7 +47,6 @@ class App extends Component {
       console.log('data list => ', data.list);
       SaveToLocalStorage('forecast_data', data.list);
 
-      this.props.dispatch(IsLoading(false));
       this.props.dispatch(SetUserLocation({
         lat: data.city.coord.lat,
         lon: data.city.coord.lon,
@@ -85,10 +84,12 @@ class App extends Component {
       return;
     }
 
-    var CityPromises = cities.map((city) => {
-      var location = encodeURIComponent(city);
-      var url = urlPrefix + location + urlSuffix + count;
-      this.props.dispatch(IsLoading(true));
+    // avoid multiple dispatch(IsLoading = true) inside promise array
+    this.props.dispatch(IsLoading(true));
+
+    let CityPromises = cities.map((city) => {
+      let location = encodeURIComponent(city);
+      let url = urlPrefix + location + urlSuffix + count;
       return fetch(url).then(response => response.json());
     });
 
