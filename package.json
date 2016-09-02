@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --progress",
     "build": "NODE_ENV=production node_modules/.bin/webpack -p --progress --colors",
-    "test": "jest --watch -o",
+    "test": "jest",
     "lint": "semistandard --verbose | snazzy",
     "lint:fix": "semistandard --fix --verbose | snazzy"
   },

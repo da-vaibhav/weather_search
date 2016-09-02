@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import 'whatwg-fetch';
 import {connect} from 'react-redux';
 
-import key from '../config';
+import ConfigKey from '../config';
 
 import { SetUserLocation,
          SearchQueryChange,
@@ -16,7 +16,8 @@ import CityData from './CityData';
 import { requestUsersLocation,
          SaveToLocalStorage,
          API_BASE_URL,
-         PluckCityAndList
+         PluckCityAndList,
+         fetchGeoData
        } from './utils';
 
 class App extends Component {
@@ -25,7 +26,6 @@ class App extends Component {
 
     // bind methods
     this.getUserLocation = this.getUserLocation.bind(this);
-    this.fetchGeoData = this.fetchGeoData.bind(this);
     this.locationChange = this.locationChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
 
@@ -41,7 +41,7 @@ class App extends Component {
     .then(({lat, lon}) => {
       console.log('got user location ', lat, lon);
       this.props.dispatch(IsLoading(true));
-      return this.fetchGeoData(lat, lon);
+      return fetchGeoData(lat, lon);
     })
     .then(data => {
       console.log('data list => ', data.list);
@@ -69,24 +69,6 @@ class App extends Component {
     console.log(LocalData);
   }
 
-  fetchGeoData (latitude, longitude) {
-    console.log('fetching geo data');
-
-    let queryURL = `${API_BASE_URL}/?`;
-    let lat = `lat=${latitude}`;
-    let lon = `lon=${longitude}`;
-    let count = 'cnt=14';
-
-    return new Promise((resolve, reject) => {
-      this.props.dispatch(IsLoading(true));
-      fetch(`${queryURL}${lat}&${lon}&${count}&APPID=${key}&units=metric`)
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      });
-    });
-  }
-
   onFormSubmit (e) {
     e.preventDefault();
     let cities = this.props.SearchQuery.split(',')
@@ -95,7 +77,7 @@ class App extends Component {
 
     // all the initial bookkeeping here
     var urlPrefix = `${API_BASE_URL}?q=`;
-    var urlSuffix = `&APPID=${key}&units=metric`;
+    var urlSuffix = `&APPID=${ConfigKey}&units=metric`;
     var count = '&cnt=14';
 
     if (cities.length < 1) {
