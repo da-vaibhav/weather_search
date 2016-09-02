@@ -121,7 +121,7 @@ class App extends Component {
         }
 
         {loading ? <div className='loading-spinner'></div> : ''}
-        {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null }
+        {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null}
 
         {
           citiesDataAvailable

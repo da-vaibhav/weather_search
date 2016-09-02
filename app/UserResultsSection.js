@@ -7,6 +7,6 @@ let UserResultsSection = (props) => {
         {props.WeatherForUser}
     </div>
   );
-}
+};
 
 export default UserResultsSection;
