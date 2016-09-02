@@ -1,7 +1,5 @@
 import Reducer from '../app/reducers';
 
-
-
 describe('reducers test', function() {
   const INITIAL_STATE = {
     SearchQuery: '',
