@@ -58,6 +58,10 @@ export function OnFormSubmit (SearchQuery) {
     let CityPromises = cities.map((city) => {
       let location = encodeURIComponent(city);
       let url = urlPrefix + location + urlSuffix + count;
+      /*
+      our api endpoint (openweathermap.com/api) doesn't accept multiple city names in query
+      params, so fetch them in multiple requests and wait for their completion in `then`able Promise.all([])
+      */
       return fetch(url).then(response => response.json());
     });
 
