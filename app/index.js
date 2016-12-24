@@ -6,7 +6,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-let store = createStore(reducer, compose(applyMiddleware(thunk), window.devToolsExtension && window.devToolsExtension()));
+let store = createStore(reducer, compose(applyMiddleware(thunk)));
 
 render(
   <Provider store={store}>
