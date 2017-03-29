@@ -1,5 +1,6 @@
 /* global alert fetch */
 import 'whatwg-fetch';
+import sample_data from './sample_data';
 
 import { API_BASE_URL, PluckCityAndList } from './utils';
 import ConfigKey from '../config';
@@ -62,7 +63,10 @@ export function OnFormSubmit (SearchQuery) {
       our api endpoint (openweathermap.com/api) doesn't accept multiple city names in query
       params, so fetch them in multiple requests and wait for their completion in `then`able Promise.all([])
       */
-      return fetch(url).then(response => response.json());
+      // return fetch(url).then(response => response.json());
+         return new Promise((resolve, reject) => {
+          resolve(sample_data);
+        });
     });
 
     Promise.all(CityPromises)

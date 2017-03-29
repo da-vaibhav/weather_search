@@ -1,5 +1,6 @@
 /* global fetch */
 import ConfigKey from '../config';
+import sample_data from './sample_data';
 
 export function requestUsersLocation () {
   return new Promise((resolve, reject) => {
@@ -38,10 +39,11 @@ export function fetchGeoData (latitude, longitude) {
   let lon = `lon=${longitude}`;
 
   return new Promise((resolve, reject) => {
-    fetch(`${queryURL}${lat}&${lon}&${count}&APPID=${ConfigKey}&units=metric`)
-    .then((response) => response.json())
-    .then((data) => {
-      resolve(data);
-    });
+    // fetch(`${queryURL}${lat}&${lon}&${count}&APPID=${ConfigKey}&units=metric`)
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   resolve(data);
+    // });
+    resolve(sample_data);
   });
 }
