@@ -8,6 +8,12 @@ var config = {
     path: path.join(__dirname, '/public'),
     filename: 'bundle.js'
   },
+  "resolve": {
+    "alias": {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    }
+  },
   module: {
     loaders: [{
       test: /\.jsx?$/,
