@@ -1,7 +1,7 @@
 /* global alert */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+/* TODO: update dependencies, npm outdated */
 import { SetUserLocation,
   SearchQueryChange,
   IsLoading,
@@ -35,17 +35,19 @@ class App extends Component {
 
   getUserLocation(e) {
     e.preventDefault();
-    console.log('getting User Location...');
+    console.log('getting User Location...'); // eslint-disable-line
+
 
     // handle rejection here
     requestUsersLocation()
       .then(({ lat, lon }) => {
-        console.log('got user location ', lat, lon);
+        console.log('got user location ', lat, lon); // eslint-disable-line
         this.props.dispatch(IsLoading(true));
         return fetchGeoData(lat, lon);
       })
       .then((data) => {
-        console.log('data list => ', data.list);
+        console.log('data list => ', data.list); // eslint-disable-line
+
         SaveToLocalStorage('forecast_data', data.list);
 
         this.props.dispatch(SetUserLocation({
@@ -55,7 +57,8 @@ class App extends Component {
         }));
       })
       .catch((err) => {
-        alert(err);
+        alert(err);// eslint-disable-line
+
       });
   }
 
@@ -63,10 +66,12 @@ class App extends Component {
     const LocalData = JSON.parse(window.localStorage.getItem('forecast_data'));
 
     if (LocalData.length < 1) {
-      alert('Please provide your location to show the weather forecast data');
+      alert('Please provide your location to show the weather forecast data'); // eslint-disable-line
+
       return;
     }
-    console.log(LocalData);
+    console.log(LocalData); // eslint-disable-line
+
   }
 
   locationChange(e) {

@@ -48,7 +48,8 @@ export function OnFormSubmit(SearchQuery) {
 
   return (dispatch) => {
     if (cities.length < 1) {
-      alert('Please enter valid city names separated by comma');
+      alert('Please enter valid city names separated by comma'); // eslint-disable-line
+
       return;
     }
 
@@ -60,7 +61,8 @@ export function OnFormSubmit(SearchQuery) {
       const url = urlPrefix + location + urlSuffix + count;
       /*
       our api endpoint (openweathermap.com/api) doesn't accept multiple city names in query
-      params, so fetch them in multiple requests and wait for their completion in `then`able Promise.all([])
+      params, so fetch them in multiple requests and wait for their completion
+      in `then`able Promise.all([])
       */
       return fetch(url).then(response => response.json());
     });
@@ -74,7 +76,7 @@ export function OnFormSubmit(SearchQuery) {
       })
       .catch((ex) => {
         dispatch(IsLoading(false));
-        console.log('parsing failed', ex);
+        console.log('parsing failed', ex); // eslint-disable-line
       });
   };
 }
