@@ -58,7 +58,6 @@ class App extends Component {
       })
       .catch((err) => {
         alert(err);// eslint-disable-line
-
       });
   }
 
@@ -71,7 +70,6 @@ class App extends Component {
       return;
     }
     console.log(LocalData); // eslint-disable-line
-
   }
 
   locationChange(e) {
