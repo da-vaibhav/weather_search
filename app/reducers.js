@@ -1,4 +1,4 @@
-let InitialState = {
+const InitialState = {
   SearchQuery: '',
   IsLoading: false,
   QueryDataFetched: false,
@@ -6,21 +6,20 @@ let InitialState = {
     available: false,
     latitude: '',
     longitude: '',
-    UserGeoData: []
+    UserGeoData: [],
   },
-  CitiesData: []
+  CitiesData: [],
 };
 
-export default function reducer (state = InitialState, action) {
+export default function reducer(state = InitialState, action) {
   switch (action.type) {
-
     case 'SET_USER_LOCATION':
-      let LocationObj = { location: { available: true,
-                                       latitude: action.payload.lat,
-                                       longitude: action.payload.lon,
-                                       UserGeoData: action.payload.data
-                                     }
-                        };
+      const LocationObj = { location: { available: true,
+        latitude: action.payload.lat,
+        longitude: action.payload.lon,
+        UserGeoData: action.payload.data,
+      },
+      };
 
       return Object.assign({}, state, LocationObj, { IsLoading: false });
 
@@ -28,10 +27,10 @@ export default function reducer (state = InitialState, action) {
       return Object.assign({}, state, { SearchQuery: action.SearchQuery });
 
     case 'SET_CITIES_DATA':
-      return Object.assign({}, state, {QueryDataFetched: true, CitiesData: action.CitiesData});
+      return Object.assign({}, state, { QueryDataFetched: true, CitiesData: action.CitiesData });
 
     case 'IS_LOADING':
-      return Object.assign({}, state, {IsLoading: action.IsLoading});
+      return Object.assign({}, state, { IsLoading: action.IsLoading });
 
     default:
       return state;
