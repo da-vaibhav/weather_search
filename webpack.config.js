@@ -6,7 +6,7 @@ const config = {
   entry: path.join(__dirname, '/app/index.js'),
   output: {
     path: path.join(__dirname, '/public'),
-    filename: 'bundle.[chunkhash].js',
+    filename: 'bundle.js',
   },
   module: {
     loaders: [{
