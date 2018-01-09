@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
     "babel-core": "~6.7.*",
     "babel-jest": "^15.0.0",
     "babel-loader": "~6.2.*",
@@ -22,10 +23,14 @@
     "eslint-plugin-react": "^7.3.0",
     "jest-cli": "^15.0.2",
     "snazzy": "^4.0.1",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.6.2",
     "webpack": "3.5.5",
     "webpack-dev-server": "~1.14.*"
   },
   "dependencies": {
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

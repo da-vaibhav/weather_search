@@ -8,22 +8,27 @@ const config = {
     path: path.join(__dirname, '/public'),
     filename: 'bundle.js',
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
+    rules: [{
+      test: /\.(t|j)sx?$/,
       exclude: /node_modules/,
       include: path.resolve(__dirname, 'app'),
-      loader: 'babel-loader',
-      query: {
-        presets: ['es2015', 'react']
-      }
-    }]
+      use: { loader: 'awesome-typescript-loader',
+        options: {
+          presets: ['es2015', 'react'],
+        } },
+    },
+    { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+    ],
   },
   devServer: {
     contentBase: './public',
     colors: true,
     historyApiFallback: true,
-    inline: true
+    inline: true,
   },
 };
 
@@ -32,13 +37,13 @@ if (process.env.NODE_ENV === 'production') {
   config.plugins = [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      comments: false
+      comments: false,
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    })
+        NODE_ENV: JSON.stringify('production'),
+      },
+    }),
   ];
 }
 
