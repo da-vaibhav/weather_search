@@ -1,4 +1,3 @@
-/* global fetch */
 import ConfigKey from '../config';
 
 export function requestUsersLocation() {
