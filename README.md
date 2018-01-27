@@ -3,10 +3,10 @@
 ![demo gif image](https://github.com/da-vaibhav/weather_search/blob/master/demo.gif)
 
 ## TODO
-- [] typescript version
-- [] jest tests
-- [] cypress e2e tests
-- [] add async await
+- [ ] typescript version
+- [ ] jest tests
+- [ ] cypress e2e tests
+- [ ] add async await
 
 Running it locally:
 - clone repo, then `npm i` to install all dependencies
