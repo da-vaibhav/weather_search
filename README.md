@@ -4,6 +4,7 @@
 
 ## TODO
 - [ ] typescript version
+- [ ] flow version
 - [ ] jest tests
 - [ ] cypress e2e tests
 - [ ] add async await
