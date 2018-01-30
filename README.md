@@ -8,6 +8,7 @@
 - [ ] cypress e2e tests
 - [ ] add async await
 - [ ] graphQL
+
 Running it locally:
 - clone repo, then `npm i` to install all dependencies
 - to start on port 8080 `npm start`, open `http://localhost:8080/`
