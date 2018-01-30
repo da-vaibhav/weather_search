@@ -1,6 +1,3 @@
-/* global alert fetch */
-import 'whatwg-fetch';
-
 import { API_BASE_URL, PluckCityAndList } from './utils';
 import ConfigKey from '../config';
 
