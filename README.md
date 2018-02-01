@@ -3,6 +3,7 @@
 ![demo gif image](https://github.com/da-vaibhav/weather_search/blob/master/demo.gif)
 
 ## TODO
+- [ ] migrate to node express server
 - [ ] typescript version
 - [ ] flow version
 - [ ] jest tests
