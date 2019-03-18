@@ -10,6 +10,7 @@ import { SetUserLocation,
 import WeatherList from './WeatherList';
 import UserResultsSection from './UserResultsSection';
 import CityData from './CityData';
+
 import { requestUsersLocation,
   SaveToLocalStorage,
   fetchGeoData,
@@ -19,23 +20,38 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // bind methods
-    this.getUserLocation = this.getUserLocation.bind(this);
-    this.locationChange = this.locationChange.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.state = {
+      SearchQuery: '',
+      IsLoading: false,
+      QueryDataFetched: false,
+      location: {
+        available: false,
+        latitude: '',
+        longitude: '',
+        UserGeoData: [],
+      },
+      CitiesData: [],
+    };
 
     this.null_search_text = 'please enter city names and press enter to search for cities.';
   }
 
-  onFormSubmit(e) {
+  onFormSubmit = (e) => {
     e.preventDefault();
-    // this.props.dispatch(OnFormSubmit(this.props.SearchQuery));
+    OnFormSubmit(this.state.SearchQuery)
+    .then(e => {
+      console.log(e);
+      // this.setState({...this.state,  location: {...this.state.location, UserGeoData: e.CitiesData } } );
+      this.setState({...this.state, CitiesData: e.CitiesData } );
+    })
+    .catch(reason => {
+      console.log(reason);
+    })
   }
 
-  getUserLocation(e) {
+  getUserLocation = (e) => {
     e.preventDefault();
     console.log('getting User Location...'); // eslint-disable-line
-
 
     // handle rejection here
     requestUsersLocation()
@@ -48,6 +64,9 @@ class App extends Component {
         console.log('data list => ', data.list); // eslint-disable-line
 
         SaveToLocalStorage('forecast_data', data.list);
+        this.setState({
+          CitiesData: data.list
+        });
 
         // this.props.dispatch(SetUserLocation({
         //   lat: data.city.coord.lat,
@@ -71,27 +90,26 @@ class App extends Component {
     console.log(LocalData); // eslint-disable-line
   }
 
-  locationChange(e) {
-    // this.props.dispatch(SearchQueryChange(e.target.value));
+  locationChange = (e) => {
+    this.setState({SearchQuery: (e.target.value)});
   }
 
   render() {
     const { lat: Lat,
       lon: Lon,
-      isLocationSet: isLocationAvailable,
-      citiesDataAvailable,
       CitiesData: cities,
       loading,
       location: {
+        available: isLocationAvailable,
         UserGeoData
       }
-    } = this.props;
+    } = this.state;
 
     const locationAvailability = isLocationAvailable ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';
 
     let SearchResults;
 
-    if (citiesDataAvailable) {
+    if (cities.length) {
       SearchResults = cities.map((city, i) => <CityData key={i} city_data={city} />);
     }
 
@@ -122,16 +140,16 @@ class App extends Component {
         </button>
 
         {
-          !citiesDataAvailable
+          !cities.length
             ? (<p><small>{this.null_search_text}</small></p>)
             : null
         }
 
         {loading ? <div className="loading-spinner" /> : ''}
-        {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null}
+        {/* {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null} */}
 
         {
-          citiesDataAvailable
+          cities.length
             ? (<div className="city-container">{SearchResults}</div>)
             : null
         }
@@ -140,18 +158,5 @@ class App extends Component {
     );
   }
 }
-
-// function matchStateToProps(state) {
-//   return {
-//     SearchQuery: state.SearchQuery,
-//     lat: state.location.latitude,
-//     lon: state.location.longitude,
-//     isLocationSet: state.location.available,
-//     UserGeoData: state.location.UserGeoData,
-//     CitiesData: state.CitiesData,
-//     loading: state.IsLoading,
-//     citiesDataAvailable: state.QueryDataFetched,
-//   };
-// }
 
 export default App;
