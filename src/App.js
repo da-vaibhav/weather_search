@@ -30,7 +30,7 @@ class App extends Component {
 
   onFormSubmit(e) {
     e.preventDefault();
-    this.props.dispatch(OnFormSubmit(this.props.SearchQuery));
+    // this.props.dispatch(OnFormSubmit(this.props.SearchQuery));
   }
 
   getUserLocation(e) {
@@ -42,7 +42,7 @@ class App extends Component {
     requestUsersLocation()
       .then(({ lat, lon }) => {
         console.log('got user location ', lat, lon); // eslint-disable-line
-        this.props.dispatch(IsLoading(true));
+        // this.props.dispatch(IsLoading(true));
         return fetchGeoData(lat, lon);
       })
       .then((data) => {
@@ -50,11 +50,11 @@ class App extends Component {
 
         SaveToLocalStorage('forecast_data', data.list);
 
-        this.props.dispatch(SetUserLocation({
-          lat: data.city.coord.lat,
-          lon: data.city.coord.lon,
-          data: data.list,
-        }));
+        // this.props.dispatch(SetUserLocation({
+        //   lat: data.city.coord.lat,
+        //   lon: data.city.coord.lon,
+        //   data: data.list,
+        // }));
       })
       .catch((err) => {
         alert(err);// eslint-disable-line
@@ -73,7 +73,7 @@ class App extends Component {
   }
 
   locationChange(e) {
-    this.props.dispatch(SearchQueryChange(e.target.value));
+    // this.props.dispatch(SearchQueryChange(e.target.value));
   }
 
   render() {
@@ -140,17 +140,17 @@ class App extends Component {
   }
 }
 
-function matchStateToProps(state) {
-  return {
-    SearchQuery: state.SearchQuery,
-    lat: state.location.latitude,
-    lon: state.location.longitude,
-    isLocationSet: state.location.available,
-    UserGeoData: state.location.UserGeoData,
-    CitiesData: state.CitiesData,
-    loading: state.IsLoading,
-    citiesDataAvailable: state.QueryDataFetched,
-  };
-}
+// function matchStateToProps(state) {
+//   return {
+//     SearchQuery: state.SearchQuery,
+//     lat: state.location.latitude,
+//     lon: state.location.longitude,
+//     isLocationSet: state.location.available,
+//     UserGeoData: state.location.UserGeoData,
+//     CitiesData: state.CitiesData,
+//     loading: state.IsLoading,
+//     citiesDataAvailable: state.QueryDataFetched,
+//   };
+// }
 
-export default connect(matchStateToProps)(App);
+export default App;
