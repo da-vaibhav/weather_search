@@ -1,6 +1,5 @@
 /* global alert */
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 /* TODO: update dependencies, npm outdated */
 import { SetUserLocation,
   SearchQueryChange,
@@ -81,9 +80,11 @@ class App extends Component {
       lon: Lon,
       isLocationSet: isLocationAvailable,
       citiesDataAvailable,
-      UserGeoData,
       CitiesData: cities,
       loading,
+      location: {
+        UserGeoData
+      }
     } = this.props;
 
     const locationAvailability = isLocationAvailable ? `Lat: ${Lat}, Lon: ${Lon}` : 'Not Available';

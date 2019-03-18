@@ -1,5 +1,5 @@
 /* global fetch */
-import ConfigKey from '../config';
+import ConfigKey from './config';
 
 export function requestUsersLocation() {
   return new Promise((resolve, reject) => {

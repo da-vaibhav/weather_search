@@ -1,5 +1,5 @@
 import { API_BASE_URL, PluckCityAndList } from './utils';
-import ConfigKey from '../config';
+import ConfigKey from './config';
 
 export function SetUserLocation(location) {
   return {

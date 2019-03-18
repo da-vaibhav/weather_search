@@ -10,8 +10,7 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
