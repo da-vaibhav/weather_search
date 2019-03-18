@@ -41,7 +41,6 @@ class App extends Component {
     OnFormSubmit(this.state.SearchQuery)
     .then(e => {
       console.log(e);
-      // this.setState({...this.state,  location: {...this.state.location, UserGeoData: e.CitiesData } } );
       this.setState({...this.state, CitiesData: e.CitiesData } );
     })
     .catch(reason => {
@@ -63,16 +62,17 @@ class App extends Component {
       .then((data) => {
         console.log('data list => ', data.list); // eslint-disable-line
 
-        SaveToLocalStorage('forecast_data', data.list);
-        this.setState({
-          CitiesData: data.list
-        });
+      SaveToLocalStorage('forecast_data', data.list);
 
-        // this.props.dispatch(SetUserLocation({
-        //   lat: data.city.coord.lat,
-        //   lon: data.city.coord.lon,
-        //   data: data.list,
-        // }));
+      this.setState({...this.state,
+        location: {...this.state.location,
+            available: true,
+            latitude: data.city.coord.lat,
+            longitude: data.city.coord.lon,
+            UserGeoData: data.list,
+        }
+      });
+
       })
       .catch((err) => {
         alert(err);// eslint-disable-line
@@ -95,12 +95,13 @@ class App extends Component {
   }
 
   render() {
-    const { lat: Lat,
-      lon: Lon,
+    const {
       CitiesData: cities,
       loading,
       location: {
         available: isLocationAvailable,
+        latitude: Lat,
+        longitude: Lon,
         UserGeoData
       }
     } = this.state;
@@ -146,7 +147,7 @@ class App extends Component {
         }
 
         {loading ? <div className="loading-spinner" /> : ''}
-        {/* {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null} */}
+        {isLocationAvailable ? <UserResultsSection WeatherForUser={WeatherForUser} /> : null}
 
         {
           cities.length
