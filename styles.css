@@ -1,0 +1,55 @@
+html {
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+
+input, button {
+  border-radius: 3px;
+  border: 1px solid gray;
+}
+
+button {
+  font-size: 16px;
+  padding: 10px;
+  background-color: steelblue;
+  color: white;
+}
+
+input {
+  width: 500px;
+  display: inline-block;
+  padding: 10px 5px;
+  font-size: 15px;
+}
+
+@keyframes rotate-forever {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  animation-duration: 0.75s;
+  animation-iteration-count: infinite;
+  animation-name: rotate-forever;
+  animation-timing-function: linear;
+  height: 30px;
+  width: 30px;
+  border: 8px solid salmon;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+}
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  margin: -15px 0 -15px;
+}
+
+.city-container > div {
+  display: inline-block;
+  float: left;
+  padding: 15px;
+}
