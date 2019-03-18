@@ -43,15 +43,14 @@ export function OnFormSubmit(SearchQuery) {
   const urlSuffix = `&APPID=${ConfigKey}&units=metric`;
   const count = '&cnt=14';
 
-  return (dispatch) => {
+  return new Promise((resolve, reject) => {
     if (cities.length < 1) {
-      alert('Please enter valid city names separated by comma'); // eslint-disable-line
-
+      reject('Please enter valid city names separated by comma'); // eslint-disable-line
       return;
     }
 
     // avoid multiple dispatch(IsLoading = true) inside promise array
-    dispatch(IsLoading(true));
+    // dispatch(IsLoading(true));
 
     const CityPromises = cities.map((city) => {
       const location = encodeURIComponent(city);
@@ -68,12 +67,12 @@ export function OnFormSubmit(SearchQuery) {
       .then((AllResponses) => {
         const CitiesData = AllResponses.map(PluckCityAndList);
 
-        dispatch(IsLoading(false));
-        dispatch(SetCitiesData({ CitiesData }));
+        // dispatch(IsLoading(false));
+        resolve(SetCitiesData({ CitiesData }));
       })
       .catch((ex) => {
-        dispatch(IsLoading(false));
+        reject(IsLoading(false));
         console.log('parsing failed', ex); // eslint-disable-line
       });
-  };
+  });
 }
