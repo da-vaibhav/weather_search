@@ -10,7 +10,9 @@
     "eject": "react-scripts eject",
     "cypress:open": "cypress open"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^1.6.0"
+  },
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
